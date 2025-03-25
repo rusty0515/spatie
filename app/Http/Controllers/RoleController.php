@@ -34,7 +34,7 @@ class RoleController extends Controller
      protected function sanitizeInput(array $data): array
      {
          return array_map(function ($value) {
-            strip_tags($value);
+            return is_string($value) ? strip_tags($value) : $value;  strip_tags($value);
          }, $data);
      }
     public function store(Request $request)
@@ -45,6 +45,7 @@ class RoleController extends Controller
             'permissions.*' => 'required|exists:permissions,id'
        ]);
        $sanitized = $this->sanitizeInput($validated);
+    //    dd($sanitized);
 
        $role = Role::create([
                 'name' => $sanitized['name'],
